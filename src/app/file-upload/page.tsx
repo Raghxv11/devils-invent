@@ -23,25 +23,6 @@ const FileUpload: React.FC = () => {
     setError("");
     setUploadProgress(0);
     setUploadSuccess(false);
-    setIsUploading(true);
-
-    // Simulate progress
-    const interval = setInterval(() => {
-      setUploadProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          setIsUploading(false);
-          setUploadSuccess(true);
-          return 100;
-        }
-        return prev + 4;
-      });
-    }, 200);
-
-    // Wait for progress to complete, then navigate
-    setTimeout(() => {
-      router.push('/result');
-    }, 10000);
   };
 
   const handleSubmit = () => {
@@ -60,9 +41,9 @@ const FileUpload: React.FC = () => {
           setUploadSuccess(true);
           return 100;
         }
-        return prev + 4;
+        return prev + 1; // Slower increment for 10-second duration
       });
-    }, 200);
+    }, 100);
 
     // Wait for progress to complete, then navigate
     setTimeout(() => {
