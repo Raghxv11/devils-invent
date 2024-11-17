@@ -47,7 +47,7 @@ const Hero = () => {
                   className="flex flex-col items-center justify-center space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0"
                 >
                   <Link
-                    href={"/upload"}
+                    href={"/file-upload"}
                     className="rounded-sm bg-[#4A6CF7] px-8 py-4 text-base font-semibold text-white duration-300 ease-in-out hover:bg-primary/80"
                   >
                     Get Started

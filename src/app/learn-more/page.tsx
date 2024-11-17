@@ -82,7 +82,7 @@ const LearnMore = () => {
                       <div className="text-[#4A6CF7] text-xl font-bold">03</div>
                       <h3 className="font-semibold text-black dark:text-white">Transform</h3>
                       <p className="text-body-color dark:text-body-color-dark">
-                        Receive clear, visual representations of your content
+                        Receive visual representations, quizzes, and summaries of your content
                       </p>
                     </div>
                   </div>
