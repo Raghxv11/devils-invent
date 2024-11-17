@@ -11,6 +11,7 @@ import { FileText, Send, HelpCircle, Menu, BarChart2, Settings, Users, BookOpen,
 import { motion, AnimatePresence } from 'framer-motion'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { User, LogOut } from 'lucide-react'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
 const MotionButton = motion(Button)
 
@@ -19,10 +20,135 @@ export default function Dashboard() {
   const [activeTab, setActiveTab] = useState('original')
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
+  const [summaryOpen, setSummaryOpen] = useState(false)
+  const [quizOpen, setQuizOpen] = useState(false)
+  const [currentQuestion, setCurrentQuestion] = useState(0)
+  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
+  const [score, setScore] = useState(0)
+  const [showResults, setShowResults] = useState(false)
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+  const questions = [
+    {
+      id: 1,
+      question: "What powers the main hydraulic system of the Hawker 800XP?",
+      options: [
+        "Electric pumps",
+        "Two engine-driven pumps",
+        "APU-driven pump",
+        "Single central hydraulic pump"
+      ],
+      correctAnswer: "Two engine-driven pumps",
+      correctIndex: 1
+    },
+    {
+      id: 2,
+      question: "The aircraft's fire extinguishing system for engines is described as a \"two-shot system.\" What does this mean?",
+      options: [
+        "It can protect against two different types of fires",
+        "It can extinguish fires in two separate engines simultaneously",
+        "It provides two separate discharge opportunities for the same engine",
+        "It requires two pilots to activate"
+      ],
+      correctAnswer: "It provides two separate discharge opportunities for the same engine",
+      correctIndex: 2
+    },
+    {
+      id: 3,
+      question: "Which component is used to remove moisture from the air conditioning system?",
+      options: [
+        "Ram air heat exchanger",
+        "Water separator",
+        "Cooling turbine",
+        "Dorsal intake duct"
+      ],
+      correctAnswer: "Water separator",
+      correctIndex: 1
+    },
+    {
+      id: 4,
+      question: "How is cabin pressurization normally controlled?",
+      options: [
+        "Through a single outflow valve",
+        "Through two outflow/safety valves",
+        "Direct engine bleed control",
+        "Manual control only"
+      ],
+      correctAnswer: "Through two outflow/safety valves",
+      correctIndex: 1
+    },
+    {
+      id: 5,
+      question: "Which system is used for anti-icing the wing and horizontal stabilizer leading edges?",
+      options: [
+        "Electrical heating",
+        "Engine bleed air",
+        "TKS fluid system",
+        "Pneumatic boots"
+      ],
+      correctAnswer: "TKS fluid system",
+      correctIndex: 2
+    },
+    {
+      id: 6,
+      question: "How are the primary flight controls (ailerons, rudder, and elevators) actuated?",
+      options: [
+        "Hydraulically",
+        "Electrically",
+        "Mechanically",
+        "Pneumatically"
+      ],
+      correctAnswer: "Mechanically",
+      correctIndex: 2
+    },
+    {
+      id: 7,
+      question: "What backup system is available for flap operation if the main hydraulic system fails?",
+      options: [
+        "Electric motor",
+        "Manual hand crank",
+        "Auxiliary hydraulic system",
+        "Emergency pneumatic system"
+      ],
+      correctAnswer: "Auxiliary hydraulic system",
+      correctIndex: 2
+    },
+    {
+      id: 8,
+      question: "The APU serves multiple functions EXCEPT:",
+      options: [
+        "Providing electrical power",
+        "Charging aircraft batteries",
+        "Providing thrust for taxi",
+        "Supplying bleed air for air conditioning"
+      ],
+      correctAnswer: "Providing thrust for taxi",
+      correctIndex: 2
+    },
+    {
+      id: 9,
+      question: "In the event of pressurization system failure, what backup system is available?",
+      options: [
+        "Emergency oxygen only",
+        "Emergency pressurization through separate ducting from #2 Engine",
+        "Manual pressure control only",
+        "None of the above"
+      ],
+      correctAnswer: "Emergency pressurization through separate ducting from #2 Engine",
+      correctIndex: 1
+    },
+    {
+      id: 10,
+      question: "How many static vent plates does the pitot-static system utilize?",
+      options: [
+        "Two",
+        "Three",
+        "Four",
+        "Six"
+      ],
+      correctAnswer: "Four",
+      correctIndex: 2
+    }
+  ]
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault()
@@ -42,6 +168,34 @@ export default function Dashboard() {
   const toggleTheme = () => {
     setTheme(theme === 'light' ? 'dark' : 'light')
   }
+
+  const handleAnswerSelect = (index: number) => {
+    setSelectedAnswer(index)
+  }
+
+  const handleNextQuestion = () => {
+    if (selectedAnswer === questions[currentQuestion].correctIndex) {
+      setScore(score + 1)
+    }
+    
+    if (currentQuestion + 1 < questions.length) {
+      setCurrentQuestion(currentQuestion + 1)
+      setSelectedAnswer(null)
+    } else {
+      setShowResults(true)
+    }
+  }
+
+  const resetQuiz = () => {
+    setCurrentQuestion(0)
+    setSelectedAnswer(null)
+    setScore(0)
+    setShowResults(false)
+  }
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   if (!mounted) return null
 
@@ -228,32 +382,34 @@ export default function Dashboard() {
             <div className="col-span-1 space-y-6">
               <Card className="bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] text-white">
                 <CardHeader>
-                  <CardTitle className="text-lg font-semibold">Generate Summary</CardTitle>
+                  <CardTitle className="text-lg font-semibold">View Summary</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm">Create a comprehensive summary of your document with AI assistance.</p>
+                  <p className="text-sm">We have created a comprehensive summary of your document with AI assistance.</p>
                   <MotionButton
                     className="mt-4 bg-white text-[#6366F1] hover:bg-gray-100"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
+                    onClick={() => setSummaryOpen(true)}
                   >
-                    Generate
+                    View
                   </MotionButton>
                 </CardContent>
               </Card>
 
               <Card className="bg-gradient-to-r from-[#8B5CF6] to-[#6366F1] text-white">
                 <CardHeader>
-                  <CardTitle className="text-lg font-semibold">Create Quiz</CardTitle>
+                  <CardTitle className="text-lg font-semibold">View Quiz</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm">Generate an interactive quiz based on your document content.</p>
+                  <p className="text-sm">We have generated an interactive quiz based on your document content.</p>
                   <MotionButton
                     className="mt-4 bg-white text-[#8B5CF6] hover:bg-gray-100"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
+                    onClick={() => setQuizOpen(true)}
                   >
-                    Create
+                    View
                   </MotionButton>
                 </CardContent>
               </Card>
@@ -347,6 +503,135 @@ export default function Dashboard() {
           </div>
         </main>
       </div>
+
+      {/* Summary Dialog */}
+      <Dialog open={summaryOpen} onOpenChange={setSummaryOpen}>
+        <DialogContent className="max-w-2xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900">
+          <DialogHeader className="border-b border-gray-200 dark:border-gray-700 pb-4">
+            <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] text-transparent bg-clip-text">
+              Document Summary
+            </DialogTitle>
+          </DialogHeader>
+          <div className="mt-6 text-gray-700 dark:text-gray-300 space-y-6">
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="text-lg leading-relaxed font-medium"
+            >
+              The Hawker 800XP is a sophisticated business aircraft equipped with dual TFE 731-5BR-1A turbofan engines and comprehensive systems for safe operation in various conditions. Key systems include:
+            </motion.p>
+            <motion.ul 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="grid gap-3"
+            >
+              {[
+                "Twin Garrett AiResearch TFE 731-5BR-1A turbofan engines with TR5000BA thrust reverser system",
+                "Self-sufficient APU providing electrical power and bleed air for ground operations",
+                "Dual-shot engine fire extinguishing system and separate APU fire protection",
+                "Engine bleed air-based air conditioning and pressurization systems",
+                "TKS fluid system for wings/stabilizers with electrical heating for windows/sensors",
+                "Mechanical primary controls with hydraulic secondary controls",
+                "EFIS 86 E or SPZ 8000 Electronic Flight Instrument Systems"
+              ].map((item, index) => (
+                <motion.li
+                  key={index}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 + 0.3 }}
+                  className="flex items-center space-x-3 bg-white dark:bg-gray-800 p-3 rounded-lg shadow-sm"
+                >
+                  <div className="flex-shrink-0 w-2 h-2 bg-[#6366F1] rounded-full" />
+                  <span className="text-sm">{item}</span>
+                </motion.li>
+              ))}
+            </motion.ul>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Quiz Dialog */}
+      <Dialog open={quizOpen} onOpenChange={(open) => {
+        setQuizOpen(open)
+        if (!open) resetQuiz()
+      }}>
+        <DialogContent className="max-w-2xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900">
+          <DialogHeader className="border-b border-gray-200 dark:border-gray-700 pb-4">
+            <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-[#8B5CF6] to-[#6366F1] text-transparent bg-clip-text">
+              Knowledge Check
+            </DialogTitle>
+          </DialogHeader>
+          
+          <div className="mt-6 text-gray-700 dark:text-gray-300">
+            {!showResults ? (
+              <motion.div
+                key={currentQuestion}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                className="space-y-6"
+              >
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-medium">Question {currentQuestion + 1} of {questions.length}</span>
+                  <span className="text-sm font-medium">Score: {score}</span>
+                </div>
+                
+                <p className="text-lg font-medium">{questions[currentQuestion].question}</p>
+                
+                <div className="space-y-3">
+                  {questions[currentQuestion].options.map((option, index) => (
+                    <motion.button
+                      key={index}
+                      className={`w-full text-left p-4 rounded-lg border transition-colors ${
+                        selectedAnswer === index
+                          ? 'border-[#6366F1] bg-[#6366F1]/10'
+                          : 'border-gray-200 dark:border-gray-700 hover:border-[#6366F1]'
+                      }`}
+                      onClick={() => handleAnswerSelect(index)}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      {option}
+                    </motion.button>
+                  ))}
+                </div>
+                
+                <MotionButton
+                  className="w-full bg-[#6366F1] text-white"
+                  onClick={handleNextQuestion}
+                  disabled={selectedAnswer === null}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  {currentQuestion === questions.length - 1 ? 'Finish Quiz' : 'Next Question'}
+                </MotionButton>
+              </motion.div>
+            ) : (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-center space-y-6"
+              >
+                <h3 className="text-2xl font-bold">Quiz Complete!</h3>
+                <p className="text-lg">Your score: {score} out of {questions.length}</p>
+                <p className="text-sm">
+                  ({Math.round((score / questions.length) * 100)}% correct)
+                </p>
+                <MotionButton
+                  className="bg-[#6366F1] text-white"
+                  onClick={resetQuiz}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  Retry Quiz
+                </MotionButton>
+              </motion.div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

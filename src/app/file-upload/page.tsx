@@ -160,7 +160,7 @@ const FileUpload: React.FC = () => {
                   : 'bg-white text-gray-500 cursor-not-allowed'
               }`}
             >
-              {isUploading ? 'Processing...' : 'Analyze Document'}
+              {isUploading ? 'Processing...' : 'Submit Document'}
             </motion.button>
           </div>
         </motion.div>
