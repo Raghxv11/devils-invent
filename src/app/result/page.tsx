@@ -12,6 +12,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { User, LogOut } from 'lucide-react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import Image from 'next/image'
 
 const MotionButton = motion(Button)
 
@@ -342,7 +343,7 @@ export default function Dashboard() {
                     >
                       <TabsContent value="original">
                         <motion.div
-                          className={`bg-gray-100 dark:bg-gray-700 h-[calc(100vh-400px)] rounded-lg flex items-center justify-center border-2 border-dashed ${
+                          className={`bg-gray-100 dark:bg-gray-700 h-[calc(100vh-200px)] rounded-lg flex items-center justify-center border-2 border-dashed ${
                             isDragging ? 'border-[#6366F1]' : 'border-gray-300 dark:border-gray-600'
                           }`}
                           animate={{ scale: isDragging ? 1.05 : 1 }}
@@ -351,24 +352,27 @@ export default function Dashboard() {
                           onDragLeave={handleDragLeave}
                           onDrop={handleDrop}
                         >
-                          <div className="text-center">
-                            <FileText className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" />
-                            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">Drag and drop your PDF here or click to upload</p>
+                          <div className="h-full w-full relative">
+                            <Image 
+                              src="/before.jpeg" 
+                              alt="Before" 
+                              fill
+                              className="object-contain"
+                              priority
+                            />
                           </div>
                         </motion.div>
                       </TabsContent>
                       <TabsContent value="modified">
-                        <div className="bg-gray-100 dark:bg-gray-700 h-[calc(100vh-400px)] rounded-lg flex items-center justify-center">
-                          <div className="text-center">
-                            <BookOpen className="mx-auto h-12 w-12 text-[#6366F1]" />
-                            <p className="mt-2 text-sm text-gray-700 dark:text-gray-300">Enhanced PDF with learning aids</p>
-                            <MotionButton
-                              className="mt-4 bg-[#6366F1] text-white hover:bg-[#5457E5]"
-                              whileHover={{ scale: 1.05 }}
-                              whileTap={{ scale: 0.95 }}
-                            >
-                              Generate Enhanced PDF
-                            </MotionButton>
+                        <div className="bg-gray-100 dark:bg-gray-700 h-[calc(100vh-200px)] rounded-lg flex items-center justify-center">
+                          <div className="h-full w-full relative">
+                            <Image 
+                              src="/final.gif" 
+                              alt="After" 
+                              fill
+                              className="object-contain"
+                              priority
+                            />
                           </div>
                         </div>
                       </TabsContent>
