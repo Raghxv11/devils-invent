@@ -89,66 +89,6 @@ export default function Dashboard() {
       correctAnswer: "TKS fluid system",
       correctIndex: 2
     },
-    {
-      id: 6,
-      question: "How are the primary flight controls (ailerons, rudder, and elevators) actuated?",
-      options: [
-        "Hydraulically",
-        "Electrically",
-        "Mechanically",
-        "Pneumatically"
-      ],
-      correctAnswer: "Mechanically",
-      correctIndex: 2
-    },
-    {
-      id: 7,
-      question: "What backup system is available for flap operation if the main hydraulic system fails?",
-      options: [
-        "Electric motor",
-        "Manual hand crank",
-        "Auxiliary hydraulic system",
-        "Emergency pneumatic system"
-      ],
-      correctAnswer: "Auxiliary hydraulic system",
-      correctIndex: 2
-    },
-    {
-      id: 8,
-      question: "The APU serves multiple functions EXCEPT:",
-      options: [
-        "Providing electrical power",
-        "Charging aircraft batteries",
-        "Providing thrust for taxi",
-        "Supplying bleed air for air conditioning"
-      ],
-      correctAnswer: "Providing thrust for taxi",
-      correctIndex: 2
-    },
-    {
-      id: 9,
-      question: "In the event of pressurization system failure, what backup system is available?",
-      options: [
-        "Emergency oxygen only",
-        "Emergency pressurization through separate ducting from #2 Engine",
-        "Manual pressure control only",
-        "None of the above"
-      ],
-      correctAnswer: "Emergency pressurization through separate ducting from #2 Engine",
-      correctIndex: 1
-    },
-    {
-      id: 10,
-      question: "How many static vent plates does the pitot-static system utilize?",
-      options: [
-        "Two",
-        "Three",
-        "Four",
-        "Six"
-      ],
-      correctAnswer: "Four",
-      correctIndex: 2
-    }
   ]
 
   const handleDragOver = (e: React.DragEvent) => {
